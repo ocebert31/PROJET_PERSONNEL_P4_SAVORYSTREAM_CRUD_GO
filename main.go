@@ -8,6 +8,7 @@ import (
 	"sauce-service/src/db"
 	"sauce-service/src/router"
 	"sauce-service/src/server"
+	"gorm.io/gorm"
 )
 
 func main() {
@@ -28,8 +29,8 @@ func (dbConnector) Connect() (app.DBConnection, error) {
 }
 
 type routerSetup struct{}
-func (routerSetup) Setup() *gin.Engine {
-	return router.Setup()
+func (routerSetup) Setup(db *gorm.DB) *gin.Engine {
+	return router.Setup(db)
 }
 
 type serverStarter struct{}

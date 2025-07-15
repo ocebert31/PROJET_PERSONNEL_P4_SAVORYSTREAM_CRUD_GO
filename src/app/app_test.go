@@ -57,7 +57,7 @@ type mockRouter struct {
 	engine      *gin.Engine
 }
 
-func (m *mockRouter) Setup() *gin.Engine {
+func (m *mockRouter) Setup(db *gorm.DB) *gin.Engine {
 	m.setupCalled = true
 	if m.engine == nil {
 		m.engine = gin.New()

@@ -3,16 +3,18 @@ package router
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func Setup() *gin.Engine {
+func Setup(db *gorm.DB) *gin.Engine {
 	router := gin.Default()
-	initRoutes(router)
+	initRoutes(router, db)
 	return router
 }
 
-func initRoutes(router *gin.Engine) {
+func initRoutes(router *gin.Engine, db *gorm.DB) {
 	router.GET("/", healthCheckHandler)
+	initCategoryRoutes(router, db)
 }
 
 func healthCheckHandler(c *gin.Context) {

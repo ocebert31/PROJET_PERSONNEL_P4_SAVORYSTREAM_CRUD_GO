@@ -20,7 +20,7 @@ type DBConnector interface {
 }
 
 type Router interface {
-	Setup() *gin.Engine
+	Setup(*gorm.DB) *gin.Engine
 }
 
 type Server interface {
@@ -41,6 +41,6 @@ func RunApp( configLoader ConfigLoader, dbConnector DBConnector, router Router, 
 	db := database.GetDB()
 	_ = db
 	log.Println("✅ Connexion à PostgreSQL réussie")
-	engine := router.Setup()
+	engine := router.Setup(db)
 	return server.Start(engine)
 }
