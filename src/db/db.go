@@ -4,6 +4,10 @@ import (
 	"sauce-service/src/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"testing"
+	"os"
+	"github.com/joho/godotenv"
+	"sauce-service/src/models"
 )
 
 type DBHandler interface {
@@ -58,4 +62,22 @@ func Connect() (DBHandler, error) {
 	return ConnectWith(config.GetDatabaseDSN, func(dsn string) (*gorm.DB, error) {
 		return gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	})
+}
+
+func SetupTestDB(t *testing.T) *gorm.DB {
+	err := godotenv.Load("../../.env.test")
+    if err != nil {
+        t.Fatalf("Erreur chargement fichier .env: %v", err)
+    }
+    dsn := os.Getenv("SAUCE_API_DSN_TEST")
+    if dsn == "" {
+        t.Fatalf("SAUCE_API_DSN_TEST non défini dans les variables d'environnement")
+    }
+    db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+    if err != nil {
+        t.Fatalf("failed to connect test db: %v", err)
+    }
+    db.Migrator().DropTable(&models.Category{})
+    db.AutoMigrate(&models.Category{})
+    return db
 }

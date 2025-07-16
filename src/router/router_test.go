@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
+	"gorm.io/gorm"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
@@ -25,4 +25,21 @@ func TestSetupRootRoute(t *testing.T) {
 	w := performRequest(router, http.MethodGet, "/")
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.JSONEq(t, `{"message":"API Go sauce démarrée 🚀"}`, w.Body.String())
+}
+
+func TestInitRoutesCallsInitCategoryRoutes(t *testing.T) {
+    router := gin.New()
+    db := &gorm.DB{}
+    initRoutes(router, db)
+    r := router.Routes()
+    found := false
+    for _, route := range r {
+        if route.Path == "/categories" {
+            found = true
+            break
+        }
+    }
+    if !found {
+        t.Error("initCategoryRoutes semble ne pas avoir été appelée, route /categories absente")
+    }
 }

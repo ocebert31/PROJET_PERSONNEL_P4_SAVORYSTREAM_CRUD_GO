@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Ici les usecases sont des passerelles vers les services
 func CreateFromInput(db *gorm.DB, input CategoryInput) (*models.Category, error) {
 	return services.CreateCategory(db, input.Name)
 }
