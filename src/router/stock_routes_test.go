@@ -9,20 +9,20 @@ import (
 	"sauce-service/src/utils"
 )
 
-func TestInitCategoryRoutes(t *testing.T) {
+func TestInitStockRoutes(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	router := gin.New()
 	utils.SetupTestDB()
-    initCategoryRoutes(router, utils.TestDB)
+    initStockRoutes(router, utils.TestDB)
 	routes := []struct {
 		method string
 		path   string
 	}{
-		{"POST", "/categories"},
-		{"GET", "/categories"},
-		{"GET", "/categories/1"},
-		{"DELETE", "/categories/1"},
-		{"PUT", "/categories/1"},
+		{"POST", "/stocks"},
+		{"GET", "/stocks"},
+		{"GET", "/stocks/1"},
+		{"DELETE", "/stocks/1"},
+		{"PUT", "/stocks/1"},
 	}
 	for _, route := range routes {
 		req, _ := http.NewRequest(route.method, route.path, nil)

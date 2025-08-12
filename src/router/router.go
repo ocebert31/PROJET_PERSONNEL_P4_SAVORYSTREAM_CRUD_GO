@@ -15,6 +15,7 @@ func Setup(db *gorm.DB) *gin.Engine {
 func initRoutes(router *gin.Engine, db *gorm.DB) {
 	router.GET("/", healthCheckHandler)
 	initCategoryRoutes(router, db)
+	initStockRoutes(router, db)
 }
 
 func healthCheckHandler(c *gin.Context) {

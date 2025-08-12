@@ -1,8 +1,10 @@
 package services
 
 import (
-	"sauce-service/src/models"
 	"gorm.io/gorm"
+    "sauce-service/src/models"
+    "errors"
+	"github.com/google/uuid"
 )
 
 func CreateCategory(db *gorm.DB, name string) (*models.Category, error) {
@@ -22,11 +24,14 @@ func GetAllCategories(db *gorm.DB) ([]models.Category, error) {
 }
 
 func GetCategoryByID(db *gorm.DB, id string) (*models.Category, error) {
-	var category models.Category
-	if err := db.First(&category, "id = ?", id).Error; err != nil {
-		return nil, err
-	}
-	return &category, nil
+    if _, err := uuid.Parse(id); err != nil {
+        return nil, errors.New("invalid UUID format")
+    }
+    var category models.Category
+    if err := db.First(&category, "id = ?", id).Error; err != nil {
+        return nil, err
+    }
+    return &category, nil
 }
 
 func DeleteCategory(db *gorm.DB, id string) error {
